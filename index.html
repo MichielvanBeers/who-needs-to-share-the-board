@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
+    <script src="https://cdn.jsdelivr.net/npm/party-js@latest/bundle/party.min.js"></script>
+    <script>
+      function pickName() {
+        const names = [
+          { name: "Michiel 1", weight: 1 },
+          { name: "Michiel 2", weight: 1 },
+          { name: "Jesse", weight: 1 },
+          { name: "Kevin", weight: 1.1 },
+          { name: "Frank", weight: 1},
+          { name: "Ralph", weight: 1},
+          { name: "Louise", weight: 1},
+          { name: "Tarek", weight: 1},
+          { name: "Ashwas", weight: 1},
+          { name: "David", weight: 1},
+          { name: "William", weight: 1},
+        ];
+
+        const totalWeight = names.reduce((sum, n) => sum + n.weight, 0);
+        const rand = Math.random() * totalWeight;
+
+        let sum = 0;
+        for (let i = 0; i < names.length; i++) {
+          sum += names[i].weight;
+          if (rand <= sum) {
+            return names[i].name;
+          }
+        }
+      }
+
+      function handleClick() {
+        const randomName = pickName();
+        const button = document.getElementById("sparkly-button");
+        button.style.display = "none";
+
+        const nameDisplay = document.getElementById("chosen-name");
+        nameDisplay.innerText = randomName;
+        nameDisplay.style.display = "block";
+
+        party.confetti(nameDisplay);
+      }
+
+      function showButton() {
+        const nameDisplay = document.getElementById("chosen-name");
+        const button = document.getElementById("sparkly-button");
+        nameDisplay.style.display = "none";
+        button.style.display = "block";
+      }
+    </script>
+    <style>
+      * {
+        font-family: "Roboto", sans-serif;
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+        background-color: #f3f3f3;
+      }
+
+      button {
+        background-color: red;
+        color: white;
+        font-size: 24px;
+        font-weight: 500;
+        padding: 20px 40px;
+        border: none;
+        border-radius: 10px;
+        cursor: pointer;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+      }
+
+      button:hover {
+        box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
+      }
+
+      #chosen-name {
+        display: none;
+        font-size: 64px;
+        font-weight: 500;
+        color: #444;
+        cursor: pointer;
+      }
+
+      #wrapper {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+    </style>
+    <title>Who needs to share the board?</title>
+  </head>
+
+  <body>
+    <div id="wrapper">
+      <button id="sparkly-button" onclick="handleClick()">
+        Who needs to share the board?
+      </button>
+      <p id="chosen-name" onclick="showButton()"></p>
+    </div>
+  </body>
+</html>
