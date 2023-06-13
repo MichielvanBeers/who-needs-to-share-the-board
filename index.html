@@ -9,35 +9,61 @@
     />
     <script src="https://cdn.jsdelivr.net/npm/party-js@latest/bundle/party.min.js"></script>
     <script>
-      function pickName() {
-        const names = [
-          { name: "Michiel 1", weight: 1 },
-          { name: "Michiel 2", weight: 1 },
-          { name: "Jesse", weight: 1 },
-          { name: "Kevin", weight: 1.1 },
-          { name: "Frank", weight: 1},
-          { name: "Ralph", weight: 1},
-          { name: "Louise", weight: 1},
-          { name: "Tarek", weight: 1},
-          { name: "Ashwas", weight: 1},
-          { name: "David", weight: 1},
-          { name: "William", weight: 1},
-        ];
+      const team_one = [
+        "Michiel 1",
+        "Michiel 2",
+        "Jesse",
+        "Kevin",
+        "Frank",
+        "Ralph",
+        "Louise",
+        "Tarek",
+        "Ashwas",
+        "David",
+        "William",
+      ];
 
-        const totalWeight = names.reduce((sum, n) => sum + n.weight, 0);
-        const rand = Math.random() * totalWeight;
+      const team_rocket = [
+        "Ivan",
+        "Maria",
+        "Sandhya",
+        "Dries",
+        "Nick",
+        "Tonny",
+        "Alex",
+        "Linh",
+        "Kenny",
+      ];
 
-        let sum = 0;
-        for (let i = 0; i < names.length; i++) {
-          sum += names[i].weight;
-          if (rand <= sum) {
-            return names[i].name;
-          }
-        }
+      function getToggleValue() {
+        return localStorage.getItem("toggleValue") === "team_rocket";
+      }
+
+      function setToggleValue(value) {
+        localStorage.setItem("toggleValue", value ? "team_rocket" : "team_one");
+      }
+
+      function hideToggle() {
+        const toggleContainer = document.getElementById("toggle-container");
+        toggleContainer.style.display = "none";
+      }
+
+      function showToggle() {
+        const toggleContainer = document.getElementById("toggle-container");
+        toggleContainer.style.display = "flex";
+      }
+
+      function pickName(namesArray) {
+        return namesArray[Math.floor(Math.random() * namesArray.length)];
       }
 
       function handleClick() {
-        const randomName = pickName();
+        hideToggle();
+
+        const isTeamRocket = getToggleValue();
+        const names = isTeamRocket ? team_rocket : team_one;
+        const randomName = pickName(names);
+
         const button = document.getElementById("sparkly-button");
         button.style.display = "none";
 
@@ -49,11 +75,25 @@
       }
 
       function showButton() {
+        showToggle();
         const nameDisplay = document.getElementById("chosen-name");
         const button = document.getElementById("sparkly-button");
         nameDisplay.style.display = "none";
         button.style.display = "block";
       }
+
+      function initializeToggle() {
+        const toggle = document.getElementById("team-toggle");
+        toggle.checked = getToggleValue();
+      }
+
+      function handleToggleChange(e) {
+        setToggleValue(e.target.checked);
+      }
+
+      window.onload = () => {
+        initializeToggle();
+      };
     </script>
     <style>
       * {
@@ -100,12 +140,80 @@
         flex-direction: column;
         align-items: center;
       }
+
+      .toggle-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-bottom: 15px;
+      }
+
+      .toggle-switch {
+        position: relative;
+        width: 50px;
+        display: inline-block;
+        vertical-align: middle;
+      }
+
+      .toggle-switch input {
+        display: none;
+      }
+
+      .toggle-switch-label {
+        display: block;
+        overflow: hidden;
+        cursor: pointer;
+        border: 2px solid #444;
+        border-radius: 20px;
+        background-color: #fff;
+        height: 25px;
+      }
+
+      .toggle-switch-switch {
+        display: block;
+        width: 50%;
+        margin: 0px;
+        background: #444;
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        right: 50%;
+        border-radius: 20px;
+        transition: all 0.1s ease-in-out;
+        height: 100%;
+      }
+
+      .toggle-switch
+        input:checked
+        + .toggle-switch-label
+        .toggle-switch-switch {
+        right: 0%;
+      }
+
+      .toggle-text {
+        margin: 0 10px;
+      }
     </style>
     <title>Who needs to share the board?</title>
   </head>
 
   <body>
     <div id="wrapper">
+      <div class="toggle-container" id="toggle-container">
+        <p class="toggle-text">Team 1️⃣</p>
+        <div class="toggle-switch">
+          <input
+            type="checkbox"
+            class="toggle-switch-input"
+            id="team-toggle"
+            onchange="handleToggleChange(event)"
+          />
+          <label class="toggle-switch-label" for="team-toggle">
+            <span class="toggle-switch-switch"></span>
+          </label>
+        </div>
+        <p class="toggle-text">Team 🚀</p>
+      </div>
       <button id="sparkly-button" onclick="handleClick()">
         Who needs to share the board?
       </button>
