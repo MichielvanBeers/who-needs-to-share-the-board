@@ -29,6 +29,10 @@ const team_one = [
     return localStorage.getItem("toggleValue") === "team_rocket";
   }
 
+  /**
+   * This functions sets the selected team in the local storage
+   * @param {boolean} value - true for team_rocket, false for team_one
+   */
   function setToggleValue(value) {
     localStorage.setItem("toggleValue", value ? "team_rocket" : "team_one");
   }
@@ -47,29 +51,45 @@ const team_one = [
     return namesArray[Math.floor(Math.random() * namesArray.length)];
   }
 
-  function handleClick() {
-    hideToggle();
+  /**
+   * This function sets display style for all elemnts with id's that are passsed as variadic arguments
+   * @param {'block' | 'none'} displayType - display style to set 
+   * @param  {...string} arguments - id's of elements to set display style to none
+   */
+  function setDisplay(displayType) {
+    for (let i = 1; i < arguments.length; i++) {
+      const element = document.getElementById(arguments[i]);
+      element.style.display = displayType;
+    }
+  }
 
+  /**
+   * set innerText by id
+   * @param {string} text - text to set
+   * @param  {...string} arguments - id's of elements to set innerText
+   */
+  function setText(text) {
+    for (let i = 1; i < arguments.length; i++) {
+      const element = document.getElementById(arguments[i]);
+      element.innerText = text;
+    }
+  }
+
+  function handleClick() {
     const isTeamRocket = getToggleValue();
     const names = isTeamRocket ? team_rocket : team_one;
     const randomName = pickName(names);
 
-    const button = document.getElementById("sparkly-button");
-    button.style.display = "none";
+    hideToggle();
 
-    const nameDisplay = document.getElementById("chosen-name");
-    nameDisplay.innerText = randomName;
-    nameDisplay.style.display = "block";
+    setDisplay("none", "sparkly-button");
+    setDisplay("block", "chosen-name", "names-sequence-block");
 
-    const firstPersonToStart = document.getElementById("first-person-to-start");
-    firstPersonToStart.innerText = randomName;
+    setText(randomName, "chosen-name");
+    setText(getRandomSequence(removeName(randomName, names)), "names-sequence");
+    setText(randomName, "first-person-to-start");
 
-    const namesSequenceBlock = document.getElementById("names-sequence-block");
-    namesSequenceBlock.style.display = "block";
-    const namesSequence = document.getElementById("names-sequence");
-    namesSequence.innerText = getRandomSequence(removeName(randomName, names));
-
-    party.confetti(nameDisplay);
+    party.confetti(document.getElementById("chosen-name"));
   }
 
   function removeName(nameToRemove, array) {
@@ -115,3 +135,4 @@ const team_one = [
   window.onload = () => {
     initializeToggle();
   };
+  
