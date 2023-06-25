@@ -1,4 +1,4 @@
-const team_one = [
+const teamOne = [
     "Michiel 1",
     "Michiel 2",
     "Jesse",
@@ -13,7 +13,7 @@ const team_one = [
     "Bhaskara"
   ];
 
-  const team_rocket = [
+  const teamRocket = [
     "Ivan",
     "Maria",
     "Sandhya",
@@ -24,6 +24,78 @@ const team_one = [
     "Linh",
     "Kenny",
   ];
+
+
+  const weights = {};
+
+  function initializeWeights() {
+
+    const storedWeights = localStorage.getItem("weights");
+    if (storedWeights) {
+      Object.assign(weights, JSON.parse(storedWeights));
+      return;
+    } 
+
+
+    for (const name of teamOne.concat(teamRocket)) {
+      weights[name] = 10;
+    }
+  }
+  
+  function lowerWeight(name) {
+    weights[name] -= 2;
+  }
+  
+  function resetTeamWeights(team) {
+    for (const name of team) {
+      weights[name] = 10;
+    }
+  }
+  
+  /**
+   * This function picks a random name from the array of names
+   * And lowers the weight of the chosen name so it is less likely to be chosen again
+   * @param {string[]} namesArray 
+   * @returns {string} - person to start
+   */
+  function pickName(namesArray) {
+
+    const totalWeight = namesArray.reduce((acc, name) => acc + weights[name], 0);
+    const random = Math.floor(Math.random() * totalWeight);
+    let selectedName = null;
+    
+    let currentEnd = 0;
+    let ranges = namesArray.reduce((acc, name) => {
+      
+      acc.push({
+        start: currentEnd,
+        end: currentEnd + weights[name],
+        name: name
+      });
+
+      currentEnd += weights[name];
+      return acc;
+    }, []);
+
+    let selectedRange = ranges.filter(range => range.start <= random && range.end > random)[0];
+    selectedName = selectedRange.name;
+    
+    lowerWeight(selectedName);
+    
+    let currentTeamWeights = namesArray.reduce((acc, name) => {
+      acc[name] = weights[name];
+      return acc;
+    }, {})
+
+    // if over halve has had their weight lowered, reset the weights
+    if (Object.values(currentTeamWeights).filter(weight => weight < 8).length > Object.values(currentTeamWeights).length / 2) {
+      resetTeamWeights(namesArray);
+    }
+    
+    localStorage.setItem("weights", JSON.stringify(weights));
+  
+    return selectedName;
+  }
 
   function getToggleValue() {
     return localStorage.getItem("toggleValue") === "team_rocket";
@@ -45,10 +117,6 @@ const team_one = [
   function showToggle() {
     const toggleContainer = document.getElementById("toggle-container");
     toggleContainer.style.display = "flex";
-  }
-
-  function pickName(namesArray) {
-    return namesArray[Math.floor(Math.random() * namesArray.length)];
   }
 
   /**
@@ -77,7 +145,7 @@ const team_one = [
 
   function handleClick() {
     const isTeamRocket = getToggleValue();
-    const names = isTeamRocket ? team_rocket : team_one;
+    const names = isTeamRocket ? teamRocket : teamOne;
     const randomName = pickName(names);
 
     hideToggle();
@@ -97,9 +165,6 @@ const team_one = [
     const index = shuffledArray.indexOf(nameToRemove);
     if (index > -1) {
       shuffledArray.splice(index, 1);
-      console.log(`Removed ${nameToRemove} from the list.`);
-    } else {
-      console.log(`${nameToRemove} is not found in the list.`);
     }
     return shuffledArray
   }
@@ -133,6 +198,6 @@ const team_one = [
   }
 
   window.onload = () => {
+    initializeWeights();
     initializeToggle();
   };
-  
