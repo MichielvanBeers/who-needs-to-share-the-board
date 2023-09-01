@@ -9,8 +9,9 @@ const teamOne = [
     "Tarek",
     "Ashwas",
     "David",
-    "William",
-    "Bhaskara"
+    "Bhaskara",
+    "Ivan",
+    "Martins",
   ];
 
   const teamRocket = [
@@ -23,6 +24,7 @@ const teamOne = [
     "Alex",
     "Linh",
     "Kenny",
+    "Liz"
   ];
 
 
