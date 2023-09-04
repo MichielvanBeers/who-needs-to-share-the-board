@@ -62,6 +62,8 @@ const teamOne = [
    */
   function pickName(namesArray) {
 
+    addMissingNameToWeights(namesArray);
+
     const totalWeight = namesArray.reduce((acc, name) => acc + weights[name], 0);
     const random = Math.floor(Math.random() * totalWeight);
     let selectedName = null;
@@ -97,6 +99,15 @@ const teamOne = [
     localStorage.setItem("weights", JSON.stringify(weights));
   
     return selectedName;
+  }
+
+  function addMissingNameToWeights(namesArray){
+    for (var i in namesArray){
+      var name = namesArray[i];
+      if (!weights[name]){
+        weights[name] = 10;
+      }
+    }
   }
 
   function getToggleValue() {
