@@ -1,0 +1,17 @@
+{
+  "name": "who-needs-to-share-the-board",
+  "version": "1.0.0",
+  "description": "Live version can be found on https://whoneedstosharetheboard.xyz/",
+  "main": "script.js",
+  "author": "",
+  "license": "ISC",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "devDependencies": {
+    "vite": "^4.4.9"
+  }
+}
