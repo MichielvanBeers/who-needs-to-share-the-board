@@ -58,7 +58,7 @@ function resetTeamWeights(team) {
 
 /**
  * This function picks a random name from the array of names
- * And lowers the weight of the chosen name so it is less likely to be chosen again
+ * And lowers the weight of the chosen name, so it is less likely to be chosen again
  * @param {string[]} namesArray
  * @returns {string} - person to start
  */
@@ -134,7 +134,7 @@ function showToggle() {
 }
 
 /**
- * This function sets display style for all elemnts with id's that are passsed as variadic arguments
+ * This function sets display style for all elements with id's that are passed as variadic arguments
  * @param {'block' | 'none'} displayType - display style to set
  * @param  {...string} arguments - id's of elements to set display style to none
  */
