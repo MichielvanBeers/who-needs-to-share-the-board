@@ -13,5 +13,8 @@
   },
   "devDependencies": {
     "vite": "^4.4.9"
+  },
+  "dependencies": {
+    "party-js": "^2.2.0"
   }
 }

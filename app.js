@@ -1,3 +1,5 @@
+import party from "party-js";
+
 const teamOne = [
     "Michiel 1",
     "Michiel 2",
@@ -12,9 +14,9 @@ const teamOne = [
     "Bhaskara",
     "Ivan",
     "Martins",
-  ];
+];
 
-  const teamRocket = [
+const teamRocket = [
     "Ivan",
     "Maria",
     "Sandhya",
@@ -25,138 +27,137 @@ const teamOne = [
     "Linh",
     "Kenny",
     "Liz"
-  ];
+];
 
 
-  const weights = {};
+const weights = {};
 
-  function initializeWeights() {
+function initializeWeights() {
 
     const storedWeights = localStorage.getItem("weights");
     if (storedWeights) {
-      Object.assign(weights, JSON.parse(storedWeights));
-      return;
-    } 
+        Object.assign(weights, JSON.parse(storedWeights));
+        return;
+    }
 
 
     for (const name of teamOne.concat(teamRocket)) {
-      weights[name] = 10;
+        weights[name] = 10;
     }
-  }
-  
-  function lowerWeight(name) {
+}
+
+function lowerWeight(name) {
     weights[name] -= 2;
-  }
-  
-  function resetTeamWeights(team) {
+}
+
+function resetTeamWeights(team) {
     for (const name of team) {
-      weights[name] = 10;
+        weights[name] = 10;
     }
-  }
-  
-  /**
-   * This function picks a random name from the array of names
-   * And lowers the weight of the chosen name so it is less likely to be chosen again
-   * @param {string[]} namesArray 
-   * @returns {string} - person to start
-   */
-  function pickName(namesArray) {
+}
+
+/**
+ * This function picks a random name from the array of names
+ * And lowers the weight of the chosen name so it is less likely to be chosen again
+ * @param {string[]} namesArray
+ * @returns {string} - person to start
+ */
+function pickName(namesArray) {
 
     addMissingNameToWeights(namesArray);
 
     const totalWeight = namesArray.reduce((acc, name) => acc + weights[name], 0);
     const random = Math.floor(Math.random() * totalWeight);
-    let selectedName = null;
-    
+
     let currentEnd = 0;
     let ranges = namesArray.reduce((acc, name) => {
-      
-      acc.push({
-        start: currentEnd,
-        end: currentEnd + weights[name],
-        name: name
-      });
 
-      currentEnd += weights[name];
-      return acc;
+        acc.push({
+            start: currentEnd,
+            end: currentEnd + weights[name],
+            name: name
+        });
+
+        currentEnd += weights[name];
+        return acc;
     }, []);
 
     let selectedRange = ranges.filter(range => range.start <= random && range.end > random)[0];
-    selectedName = selectedRange.name;
-    
+    let selectedName = selectedRange.name;
+
     lowerWeight(selectedName);
-    
+
     let currentTeamWeights = namesArray.reduce((acc, name) => {
-      acc[name] = weights[name];
-      return acc;
+        acc[name] = weights[name];
+        return acc;
     }, {})
 
     // if over halve has had their weight lowered, reset the weights
     if (Object.values(currentTeamWeights).filter(weight => weight < 8).length > Object.values(currentTeamWeights).length / 2) {
-      resetTeamWeights(namesArray);
+        resetTeamWeights(namesArray);
     }
-    
+
     localStorage.setItem("weights", JSON.stringify(weights));
-  
+
     return selectedName;
-  }
+}
 
-  function addMissingNameToWeights(namesArray){
-    for (var i in namesArray){
-      var name = namesArray[i];
-      if (!weights[name]){
-        weights[name] = 10;
-      }
+function addMissingNameToWeights(namesArray) {
+    for (const i in namesArray) {
+        const name = namesArray[i];
+        if (!weights[name]) {
+            weights[name] = 10;
+        }
     }
-  }
+}
 
-  function getToggleValue() {
+function getToggleValue() {
     return localStorage.getItem("toggleValue") === "team_rocket";
-  }
+}
 
-  /**
-   * This functions sets the selected team in the local storage
-   * @param {boolean} value - true for team_rocket, false for team_one
-   */
-  function setToggleValue(value) {
+/**
+ * This functions sets the selected team in the local storage
+ * @param {boolean} value - true for team_rocket, false for team_one
+ */
+function setToggleValue(value) {
     localStorage.setItem("toggleValue", value ? "team_rocket" : "team_one");
-  }
+}
 
-  function hideToggle() {
+function hideToggle() {
     const toggleContainer = document.getElementById("toggle-container");
     toggleContainer.style.display = "none";
-  }
+}
 
-  function showToggle() {
+function showToggle() {
     const toggleContainer = document.getElementById("toggle-container");
     toggleContainer.style.display = "flex";
-  }
+}
 
-  /**
-   * This function sets display style for all elemnts with id's that are passsed as variadic arguments
-   * @param {'block' | 'none'} displayType - display style to set 
-   * @param  {...string} arguments - id's of elements to set display style to none
-   */
-  function setDisplay(displayType) {
+/**
+ * This function sets display style for all elemnts with id's that are passsed as variadic arguments
+ * @param {'block' | 'none'} displayType - display style to set
+ * @param  {...string} arguments - id's of elements to set display style to none
+ */
+function setDisplay(displayType) {
     for (let i = 1; i < arguments.length; i++) {
-      const element = document.getElementById(arguments[i]);
-      element.style.display = displayType;
+        const element = document.getElementById(arguments[i]);
+        element.style.display = displayType;
     }
-  }
+}
 
-  /**
-   * set innerText by id
-   * @param {string} text - text to set
-   * @param  {...string} arguments - id's of elements to set innerText
-   */
-  function setText(text) {
+/**
+ * set innerText by id
+ * @param {string} text - text to set
+ * @param  {...string} arguments - id's of elements to set innerText
+ */
+function setText(text) {
     for (let i = 1; i < arguments.length; i++) {
-      const element = document.getElementById(arguments[i]);
-      element.innerText = text;
+        const element = document.getElementById(arguments[i]);
+        element.innerText = text;
     }
-  }
+}
 
-  function handleClick() {
+function handleClick() {
     const isTeamRocket = getToggleValue();
     const names = isTeamRocket ? teamRocket : teamOne;
     const randomName = pickName(names);
@@ -171,27 +172,27 @@ const teamOne = [
     setText(randomName, "first-person-to-start");
 
     party.confetti(document.getElementById("chosen-name"));
-  }
+}
 
-  function removeName(nameToRemove, array) {
+function removeName(nameToRemove, array) {
     const shuffledArray = array.slice(); // Create a copy of the original array
     const index = shuffledArray.indexOf(nameToRemove);
     if (index > -1) {
-      shuffledArray.splice(index, 1);
+        shuffledArray.splice(index, 1);
     }
     return shuffledArray
-  }
+}
 
-  function getRandomSequence(array) {
+function getRandomSequence(array) {
     const shuffledArray = array.slice(); // Create a copy of the original array
     for (let i = shuffledArray.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-      [shuffledArray[i], shuffledArray[j]] = [shuffledArray[j], shuffledArray[i]];
+        const j = Math.floor(Math.random() * (i + 1));
+        [shuffledArray[i], shuffledArray[j]] = [shuffledArray[j], shuffledArray[i]];
     }
     return shuffledArray.join(" -> ");
-  }
+}
 
-  function showButton() {
+function showButton() {
     showToggle();
     const nameDisplay = document.getElementById("chosen-name");
     const button = document.getElementById("sparkly-button");
@@ -199,18 +200,27 @@ const teamOne = [
     nameDisplay.style.display = "none";
     namesSequenceBlock.style.display = "none";
     button.style.display = "block";
-  }
+}
 
-  function initializeToggle() {
+function initializeToggle() {
     const toggle = document.getElementById("team-toggle");
     toggle.checked = getToggleValue();
-  }
+}
 
-  function handleToggleChange(e) {
+function handleToggleChange(e) {
     setToggleValue(e.target.checked);
-  }
+}
 
-  window.onload = () => {
+window.onload = () => {
     initializeWeights();
     initializeToggle();
-  };
+};
+
+
+function setupEventListeners() {
+    document.querySelector('#sparkly-button').addEventListener('click', handleClick);
+    document.querySelector('#chosen-name').addEventListener('click', showButton);
+    document.querySelector('#team-toggle').addEventListener('change', handleToggleChange);
+}
+
+setupEventListeners();
