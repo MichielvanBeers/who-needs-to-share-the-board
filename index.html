@@ -7,8 +7,7 @@
       href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap"
       rel="stylesheet"
     />
-    <script src="https://cdn.jsdelivr.net/npm/party-js@latest/bundle/party.min.js"></script>
-    <script src="script.js"></script>
+    <script src="src/app.js" type="module"></script>
     <link rel="stylesheet" href="style.css" />
     <title>Who needs to share the board?</title>
   </head>
@@ -22,7 +21,6 @@
             type="checkbox"
             class="toggle-switch-input"
             id="team-toggle"
-            onchange="handleToggleChange(event)"
           />
           <label class="toggle-switch-label" for="team-toggle">
             <span class="toggle-switch-switch"></span>
@@ -30,10 +28,10 @@
         </div>
         <h3 class="toggle-text">Team 🚀</h3>
       </div>
-      <button id="sparkly-button" onclick="handleClick()">
+      <button id="sparkly-button">
         Who needs to share the board?
       </button>
-      <p id="chosen-name" onclick="showButton()"></p>
+      <p id="chosen-name"></p>
       <br><br><br>
       <div id="names-sequence-block" style = "display:none">Let's start with <b id="first-person-to-start"></b>'s update, and then let's follow the sequence : <br>
         <p id="names-sequence">
