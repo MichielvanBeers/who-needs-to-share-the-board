@@ -15,7 +15,7 @@ jobs:
       uses: actions/setup-node@v3
 
     - name: 🏗️ Install dependencies
-      run: npm run install
+      run: npm install
 
     - name: 👷 Build dist package
       run: npm run build
