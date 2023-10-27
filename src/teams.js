@@ -26,5 +26,6 @@ export const teams = {
         "Linh",
         "Kenny",
         "Liz",
+        "Michiel"
     ]
 };
