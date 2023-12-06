@@ -13,6 +13,7 @@ export const teams = {
         "Bhaskara",
         "Ivan",
         "Martins",
+        "Sangavi",
     ],
 
     teamRocket: [
