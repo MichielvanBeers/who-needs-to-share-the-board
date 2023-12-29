@@ -12,7 +12,6 @@ export const teams = {
         "David",
         "Bhaskara",
         "Ivan",
-        "Martins",
         "Sangavi",
     ],
 
