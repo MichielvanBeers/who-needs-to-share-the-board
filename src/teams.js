@@ -10,7 +10,6 @@ export const teams = {
         "Tarek",
         "Ashwas",
         "David",
-        "Bhaskara",
         "Ivan",
         "Sangavi",
         "Sid"
@@ -27,6 +26,7 @@ export const teams = {
         "Linh",
         "Kenny",
         "Liz",
-        "Michiel"
+        "Michiel",
+        "Bhaskara"
     ]
 };
